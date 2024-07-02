@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+</head>
+<body>
+    <h1>Sign up</h1>
+    <!-- it will create a user in DB and redirect to /ssr, which is /home page -->
+    <form action="/auth" method="POST">
+        <lable>Full name</lable>
+        <input type="text" required name="name" />
+        <lable>Email</lable>
+        <input type="text" required name="email" />
+        <lable>Password</lable>
+        <input type="password" required name="password" />
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

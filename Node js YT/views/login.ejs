@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+</head>
+<body>
+    <h1>Log in</h1>
+    <!-- it will send the submitted data to /auth/login, if login successful, it will redirect to /ssr which is home page -->
+    <form action="/auth/login" method="POST">
+        <lable>Email</lable>
+        <input type="text" required name="email" />
+        <lable>Password</lable>
+        <input type="password" required name="password" />
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
