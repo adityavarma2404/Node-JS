@@ -24,6 +24,7 @@ module.exports = class Product {
     });
   }
 
+  //fetchAll will return nothing 
   static fetchAll(cb) {
     const p = path.join(
       path.dirname(process.mainModule.filename),
