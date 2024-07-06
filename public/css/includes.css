@@ -1,0 +1,69 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.header {
+    width: 100%;
+    background-color: #adadad;
+    color: black;
+    padding: 20px;
+}
+
+.nav-ul {
+    display: flex;
+    list-style: none;
+}
+
+.nav-li {
+    margin-right: 20px;
+    font-size: 20px;
+}
+
+.nav-li a {
+    text-decoration: none;
+}
+
+.nav-li a:visited {
+    color: black;
+}
+
+.active {
+    border-bottom: 1px solid black;
+}
+
+.table-container {
+    margin: 30px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
+
+th,
+td {
+    padding: 10px;
+}
+
+th {
+    background-color: #adadad;
+}
+
+.action-column {
+    display: flex;
+}
+
+.action-column form {
+    margin-right: 10px;
+}
+
+
+.add-form {
+    margin: 30px;
+}

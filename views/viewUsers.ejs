@@ -1,0 +1,40 @@
+<%- include('includes/head.ejs') %>
+</head>
+<body>
+    <%- include('includes/nav.ejs') %>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% data.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.age %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.phone %></td>
+                        <td class="action-column">
+                            <form action="/edit" method="GET">
+                                <input type="hidden" value="<%= user._id %>" name="_id">
+                                <button>Edit</button>
+                            </form>
+                            <form action="/delete" method="GET">
+                                <input type="hidden" value="<%= user._id %>" name="_id">
+                                <button>Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        </ul>
+    </div>
+
+<%- include('includes/end.ejs') %>

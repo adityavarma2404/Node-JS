@@ -1,0 +1,28 @@
+<%- include('includes/head.ejs') %>
+</head>
+<body>
+    <%- include('includes/nav.ejs') %>
+    <div class="add-form">
+        <form action="/edit" method="POST">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" value="<%= data.name %>" />
+            <br/>
+            <br/>
+            <label for="age">Age</label>
+            <input id="age" name="age" type="number" value="<%= data.age %>" />
+            <br/>
+            <br/>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="text" value="<%= data.email %>" />
+            <br/>
+            <br/>
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="number" value="<%= data.phone %>" />
+            <br/>
+            <br/>
+            <input type="hidden" name="_id" value="<%= data._id%>" />
+            <button type="submit">submit</button>
+        </form>
+    </div>
+
+<%- include('includes/end.ejs') %>

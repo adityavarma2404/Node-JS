@@ -1,0 +1,33 @@
+<%- include('includes/head.ejs') %>
+</head>
+<body>
+    <%- include('includes/nav.ejs') %>
+    <div class="table-container">
+        <% data.forEach(college => { %>
+            <p><%= college.name %></p>
+            <br/>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% college.students.forEach( stud => { %>
+                        <tr>
+                            <td><%= stud.name %></td>
+                            <td><%= stud.email %></td>
+                            <td><%= stud.phone %></td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+        <% })%>
+    </div>
+    
+<%- include('includes/end.ejs') %>
