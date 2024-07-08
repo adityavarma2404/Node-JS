@@ -7,7 +7,7 @@ const {
   editData,
   deleteData,
   getDataById,
-  // getstudentsData,
+  getstudentsData,
 } = require("../controller/view");
 
 const userRouter = express.Router();
@@ -18,7 +18,7 @@ userRouter.post("/add-user", addData);
 userRouter.get("/edit", editForm);
 userRouter.post("/edit", editData);
 userRouter.get("/delete", deleteData);
-// userRouter.get("/students", getstudentsData);
+userRouter.get("/students", getstudentsData);
 userRouter.get("/:id", getDataById);
 
 module.exports = userRouter;

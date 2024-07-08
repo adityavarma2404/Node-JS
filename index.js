@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
+const Colleges = require("./model/college");
 // const { findCollegeById } = require("./model/college");
 
 const app = express();
@@ -29,7 +30,19 @@ mongoose
   .connect(
     "mongodb+srv://aditya:aditya123@cluster0.qec8fak.mongodb.net/users?retryWrites=true&w=majority&appName=Cluster0"
   )
-  .then((result) => app.listen(PORT))
+  .then((result) => {
+    Colleges.findOne().then((data) => {
+      if (!data) {
+        const colleges = new Colleges({
+          name: "MGIT",
+          location: "Hyderabad",
+          students: [],
+        });
+        colleges.save();
+      }
+    });
+    app.listen(PORT);
+  })
   .catch((err) => console.log(err));
 
 // mongoConnect(() => app.listen(PORT));
