@@ -27,14 +27,4 @@ const usersSchema = new Schema({
   },
 });
 
-usersSchema.methods.addToCollegeDB = function (userId, collegeId) {
-  College.findById(collegeId)
-    .then((result) => {
-      result.students.push(userId);
-      return result.save();
-    })
-    .then((result) => console.log("Added to college"))
-    .catch((err) => console.log(err));
-};
-
 module.exports = mongoose.model("Users", usersSchema);

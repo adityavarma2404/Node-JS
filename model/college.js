@@ -20,4 +20,16 @@ const collegeSchema = new Schema({
   ],
 });
 
+collegeSchema.methods.addStudentId = function (studentId) {
+  this.students.push(studentId);
+  return this.save();
+};
+collegeSchema.methods.deleteStudentId = function (studentId) {
+  const newStudentList = this.students.filter((id) => {
+    return studentId.toString() !== id.toString();
+  });
+  this.students = newStudentList;
+  return this.save();
+};
+
 module.exports = mongoose.model("Colleges", collegeSchema);

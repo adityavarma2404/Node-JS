@@ -2,15 +2,17 @@ const Users = require("../model/users");
 const Colleges = require("../model/college");
 
 function getData(req, res) {
-  Users.find()
-    .populate("collegeId")
-    .then((data) => {
-      res.render("viewUsers", {
-        title: "View",
-        path: "/",
-        data,
-      });
+  Users.find().then((data) => {
+    res.render("viewUsers", {
+      title: "View",
+      path: "/",
+      data,
     });
+  });
+}
+
+function getUpdateForm(req, res) {
+
 }
 
 function getForm(req, res) {
@@ -32,9 +34,13 @@ function addData(req, res) {
   const users = new Users(data);
   users
     .save()
-    .then((result) => {
-      result.addToCollegeDB(result._id, result.collegeId);
-      res.redirect("/");
+    .then((resultOne) => {
+      Colleges.findById(resultOne.collegeId)
+        .then((resultTwo) => {
+          return resultTwo.addStudentId(resultOne._id);
+        })
+        .then((result) => res.redirect("/"))
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 }
@@ -74,11 +80,17 @@ function editData(req, res) {
 }
 
 function deleteData(req, res) {
-  const id = req.query._id;
+  const id = req.body._id;
+  const clgId = req.body.clgId;
   Users.findByIdAndDelete(id)
     .then((result) => {
       console.log("Deleted");
-      res.redirect("/");
+      Colleges.findById(clgId)
+        .then((collegeData) => {
+          return collegeData.deleteStudentId(id);
+        })
+        .then((result) => res.redirect("/"))
+        .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
 }
@@ -95,9 +107,15 @@ function getDataById(req, res) {
 }
 
 function getstudentsData(req, res) {
-  Colleges.findById("668a3f689ab1cc602db25273")
+  Colleges.find()
     .populate("students")
-    .then((result) => console.log(result))
+    .then((data) =>
+      res.render("viewStudents", {
+        title: "Students",
+        path: "/students",
+        data,
+      })
+    )
     .catch((err) => console.log(err));
 }
 
