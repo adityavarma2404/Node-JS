@@ -6,19 +6,21 @@ function getData(req, res) {
     res.render("viewUsers", {
       title: "View",
       path: "/",
+      profilePic: `data:${
+        req.profilePic.contentType
+      };base64,${req.profilePic.data.toString("base64")}`,
       data,
     });
   });
-}
-
-function getUpdateForm(req, res) {
-
 }
 
 function getForm(req, res) {
   res.render("createUser", {
     title: "Create",
     path: "/add-user",
+    profilePic: `data:${
+      req.profilePic.contentType
+    };base64,${req.profilePic.data.toString("base64")}`,
   });
 }
 
@@ -29,8 +31,24 @@ function addData(req, res) {
     JNTU: "668a3f689ab1cc602db25274",
     OU: "668a3f689ab1cc602db25275",
   };
+  const imageFile = req.file;
+  if (!imageFile) {
+    res.render("error", {
+      title: "Error",
+      path: "",
+      message: "No image provided",
+      profilePic: `data:${
+        req.profilePic.contentType
+      };base64,${req.profilePic.data.toString("base64")}`,
+    });
+  }
+  // const imageURL = imageFile.path;
+  const imageURL = {
+    data: Buffer.from(imageFile.buffer, "base64"),
+    contentType: imageFile.mimetype,
+  };
   const { college, ...rest } = req.body;
-  const data = { ...rest, collegeId: collegeList[college] };
+  const data = { ...rest, collegeId: collegeList[college], imageURL };
   const users = new Users(data);
   users
     .save()
@@ -53,6 +71,9 @@ function editForm(req, res) {
         title: "Edit",
         path: "",
         data: user,
+        profilePic: `data:${
+          req.profilePic.contentType
+        };base64,${req.profilePic.data.toString("base64")}`,
       });
     })
     .catch((err) => console.log(err));
@@ -64,12 +85,19 @@ function editData(req, res) {
   const age = req.body.age;
   const email = req.body.email;
   const phone = req.body.phone;
+  const imageFile = req.file;
   Users.findById(id)
     .then((user) => {
       user.name = name;
       user.age = age;
       user.email = email;
       user.phone = phone;
+      if (imageFile) {
+        user.imageURL = {
+          data: Buffer.from(imageFile.buffer, "base64"),
+          contentType: imageFile.mimetype,
+        };
+      }
       return user.save();
     })
     .then((result) => {
@@ -114,6 +142,9 @@ function getstudentsData(req, res) {
         title: "Students",
         path: "/students",
         data,
+        profilePic: `data:${
+          req.profilePic.contentType
+        };base64,${req.profilePic.data.toString("base64")}`,
       })
     )
     .catch((err) => console.log(err));

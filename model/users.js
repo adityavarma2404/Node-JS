@@ -20,6 +20,14 @@ const usersSchema = new Schema({
     type: Number,
     required: true,
   },
+  // imageURL: {
+  //   type: String,
+  //   required: true,
+  // },
+  imageURL: {
+    data: Buffer,
+    contentType: String,
+  },
   collegeId: {
     type: Schema.Types.ObjectId,
     ref: "Colleges",
