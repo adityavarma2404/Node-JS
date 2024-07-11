@@ -1,7 +1,7 @@
 const Users = require("../model/users");
 const Colleges = require("../model/college");
 
-function getData(req, res) {
+exports.getData = (req, res) => {
   Users.find().then((data) => {
     res.render("viewUsers", {
       title: "View",
@@ -10,21 +10,25 @@ function getData(req, res) {
         req.profilePic.contentType
       };base64,${req.profilePic.data.toString("base64")}`,
       data,
+      isloggedin: true,
+      // isloggedin: req.session.isLoggedIn,
     });
   });
-}
+};
 
-function getForm(req, res) {
+exports.getForm = (req, res) => {
   res.render("createUser", {
     title: "Create",
     path: "/add-user",
     profilePic: `data:${
       req.profilePic.contentType
     };base64,${req.profilePic.data.toString("base64")}`,
+    isloggedin: true,
+    // isloggedin: req.session.isLoggedIn,
   });
-}
+};
 
-function addData(req, res) {
+exports.addData = (req, res) => {
   const collegeList = {
     MGIT: "668a3f689ab1cc602db25272",
     CBIT: "668a3f689ab1cc602db25273",
@@ -33,16 +37,18 @@ function addData(req, res) {
   };
   const imageFile = req.file;
   if (!imageFile) {
-    res.render("error", {
+    return res.render("error", {
       title: "Error",
       path: "",
       message: "No image provided",
       profilePic: `data:${
         req.profilePic.contentType
       };base64,${req.profilePic.data.toString("base64")}`,
+      isloggedin: true,
+      // isloggedin: req.session.isLoggedIn,
     });
   }
-  // const imageURL = imageFile.path;
+
   const imageURL = {
     data: Buffer.from(imageFile.buffer, "base64"),
     contentType: imageFile.mimetype,
@@ -61,9 +67,9 @@ function addData(req, res) {
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
-}
+};
 
-function editForm(req, res) {
+exports.editForm = (req, res) => {
   const id = req.query._id;
   Users.findById(id)
     .then((user) => {
@@ -74,12 +80,15 @@ function editForm(req, res) {
         profilePic: `data:${
           req.profilePic.contentType
         };base64,${req.profilePic.data.toString("base64")}`,
+        isloggedin: true,
+        // isloggedin: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
-}
+};
 
-function editData(req, res) {
+exports.editData = (req, res) => {
+  debugger;
   const id = req.body._id;
   const name = req.body.name;
   const age = req.body.age;
@@ -97,6 +106,8 @@ function editData(req, res) {
           data: Buffer.from(imageFile.buffer, "base64"),
           contentType: imageFile.mimetype,
         };
+      } else {
+        throw new Error("Select image file");
       }
       return user.save();
     })
@@ -104,10 +115,22 @@ function editData(req, res) {
       console.log("Updated");
       res.redirect("/");
     })
-    .catch((err) => console.log(err));
-}
+    .catch((err) => {
+      console.log(err);
+      res.render("error", {
+        title: "Error",
+        path: "",
+        message: err.message,
+        profilePic: `data:${
+          req.profilePic.contentType
+        };base64,${req.profilePic.data.toString("base64")}`,
+        // isloggedin: req.session.isLoggedIn,
+        isloggedin: true,
+      });
+    });
+};
 
-function deleteData(req, res) {
+exports.deleteData = (req, res) => {
   const id = req.body._id;
   const clgId = req.body.clgId;
   Users.findByIdAndDelete(id)
@@ -121,9 +144,9 @@ function deleteData(req, res) {
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
-}
+};
 
-function getDataById(req, res) {
+exports.getDataById = (req, res) => {
   const id = req.params.id;
   Users.findById(id)
     .select("name age -_id")
@@ -132,9 +155,9 @@ function getDataById(req, res) {
       res.send(result);
     })
     .catch((err) => console.log(err));
-}
+};
 
-function getstudentsData(req, res) {
+exports.getstudentsData = (req, res) => {
   Colleges.find()
     .populate("students")
     .then((data) =>
@@ -145,18 +168,23 @@ function getstudentsData(req, res) {
         profilePic: `data:${
           req.profilePic.contentType
         };base64,${req.profilePic.data.toString("base64")}`,
+        // isloggedin: req.session.isLoggedIn,
+        isloggedin: true,
       })
     )
     .catch((err) => console.log(err));
-}
+};
 
-module.exports = {
-  getData,
-  getForm,
-  addData,
-  editForm,
-  editData,
-  deleteData,
-  getDataById,
-  getstudentsData,
+exports.getLogin = (req, res) => {
+  res.render("login", { title: "Login", path: "/login" });
+};
+exports.postLogin = (req, res) => {
+  req.session.isLoggedIn = true;
+  res.redirect("/");
+};
+exports.postLogout = (req, res) => {
+  req.session.destroy((err) => {
+    console.log(err);
+    res.redirect("/");
+  });
 };

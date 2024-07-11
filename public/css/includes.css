@@ -77,3 +77,21 @@ th {
 .profile-img {
   border-radius: 50%;
 }
+
+.login-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-nav form {
+  margin-right: 10px;
+}

@@ -9,13 +9,18 @@
           >Add</a
         >
       </li>
+      <% if(isloggedin) {%>
       <li class="nav-li">
         <a class="<%= path === '/students' ? 'active' : '' %>" href="students"
           >Students</a
         >
       </li>
+      <% } %>
     </ul>
-    <div>
+    <div class="logout-nav">
+      <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+      </form>
       <img class="profile-img" src="<%= profilePic %>" width="40" height="40" />
     </div>
   </nav>

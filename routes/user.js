@@ -1,24 +1,18 @@
 const express = require("express");
-const {
-  getData,
-  addData,
-  getForm,
-  editForm,
-  editData,
-  deleteData,
-  getDataById,
-  getstudentsData,
-} = require("../controller/view");
+const controller = require("../controller/view");
 
 const userRouter = express.Router();
 
-userRouter.get("/", getData);
-userRouter.get("/add-user", getForm);
-userRouter.post("/add-user", addData);
-userRouter.get("/edit", editForm);
-userRouter.post("/edit", editData);
-userRouter.post("/delete", deleteData);
-userRouter.get("/students", getstudentsData);
-userRouter.get("/:id", getDataById);
+userRouter.get("/", controller.getData);
+userRouter.get("/add-user", controller.getForm);
+userRouter.post("/add-user", controller.addData);
+userRouter.get("/edit", controller.editForm);
+userRouter.post("/edit", controller.editData);
+userRouter.post("/delete", controller.deleteData);
+userRouter.get("/students", controller.getstudentsData);
+userRouter.get("/login", controller.getLogin);
+userRouter.post("/login", controller.postLogin);
+userRouter.post("/logout", controller.postLogout);
+userRouter.get("/:id", controller.getDataById);
 
 module.exports = userRouter;
