@@ -4,11 +4,11 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
-// const favicon = require("serve-favicon");
 
 const userRouter = require("./routes/user");
+const authRouter = require("./routes/auth");
 const Colleges = require("./model/college");
-const Users = require("./model/users");
+// const Users = require("./model/users");
 
 const app = express();
 const PORT = 5000;
@@ -47,26 +47,22 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  if (!req.session.profilePic) {
+    return next();
+  }
+  req.profilePic = req.session.profilePic;
+  next();
+});
+
 // app.use((req, res, next) => {
-//   if (!req.session.user) {
-//     return next();
-//   }
-//   User.findById(req.session.user._id)
-//     .then((user) => {
-//       req.user = user;
+//   Users.findById("668e7a322ceb1116c78ffe2c")
+//     .then((result) => {
+//       req.profilePic = result.imageURL;
 //       next();
 //     })
 //     .catch((err) => console.log(err));
 // });
-
-app.use((req, res, next) => {
-  Users.findById("668e7a322ceb1116c78ffe2c")
-    .then((result) => {
-      req.profilePic = result.imageURL;
-      next();
-    })
-    .catch((err) => console.log(err));
-});
 
 app.use(
   multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
@@ -77,6 +73,7 @@ app.use(
 app.get("/favicon.ico", (req, res) => res.status(204).send());
 
 app.use("/", userRouter);
+app.use("/auth", authRouter);
 
 mongoose
   .connect(MONGODB_URI)

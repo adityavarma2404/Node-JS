@@ -1,0 +1,22 @@
+<%- include('includes/head.ejs') %>
+</head>
+<body>
+    <div class="login-container">
+        <form action="/auth/signup" method="POST">
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email" >
+            <br>
+            <br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" >
+            <br>
+            <br>
+            <label for="cPassword">Confirm Password:</label><br>
+            <input type="password" id="cPassword" name="cPassword" >
+            <br>
+            <br>
+            <button>Login</button>
+        </form>
+    </div>
+
+<%- include('includes/end.ejs') %>

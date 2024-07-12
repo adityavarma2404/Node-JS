@@ -10,8 +10,8 @@ exports.getData = (req, res) => {
         req.profilePic.contentType
       };base64,${req.profilePic.data.toString("base64")}`,
       data,
-      isloggedin: true,
-      // isloggedin: req.session.isLoggedIn,
+      // isloggedin: true,
+      isloggedin: req.session.isLoggedIn,
     });
   });
 };
@@ -23,8 +23,8 @@ exports.getForm = (req, res) => {
     profilePic: `data:${
       req.profilePic.contentType
     };base64,${req.profilePic.data.toString("base64")}`,
-    isloggedin: true,
-    // isloggedin: req.session.isLoggedIn,
+    // isloggedin: true,
+    isloggedin: req.session.isLoggedIn,
   });
 };
 
@@ -44,8 +44,8 @@ exports.addData = (req, res) => {
       profilePic: `data:${
         req.profilePic.contentType
       };base64,${req.profilePic.data.toString("base64")}`,
-      isloggedin: true,
-      // isloggedin: req.session.isLoggedIn,
+      // isloggedin: true,
+      isloggedin: req.session.isLoggedIn,
     });
   }
 
@@ -80,8 +80,8 @@ exports.editForm = (req, res) => {
         profilePic: `data:${
           req.profilePic.contentType
         };base64,${req.profilePic.data.toString("base64")}`,
-        isloggedin: true,
-        // isloggedin: req.session.isLoggedIn,
+        // isloggedin: true,
+        isloggedin: req.session.isLoggedIn,
       });
     })
     .catch((err) => console.log(err));
@@ -124,8 +124,8 @@ exports.editData = (req, res) => {
         profilePic: `data:${
           req.profilePic.contentType
         };base64,${req.profilePic.data.toString("base64")}`,
-        // isloggedin: req.session.isLoggedIn,
-        isloggedin: true,
+        isloggedin: req.session.isLoggedIn,
+        // isloggedin: true,
       });
     });
 };
@@ -168,23 +168,9 @@ exports.getstudentsData = (req, res) => {
         profilePic: `data:${
           req.profilePic.contentType
         };base64,${req.profilePic.data.toString("base64")}`,
-        // isloggedin: req.session.isLoggedIn,
-        isloggedin: true,
+        isloggedin: req.session.isLoggedIn,
+        // isloggedin: true,
       })
     )
     .catch((err) => console.log(err));
-};
-
-exports.getLogin = (req, res) => {
-  res.render("login", { title: "Login", path: "/login" });
-};
-exports.postLogin = (req, res) => {
-  req.session.isLoggedIn = true;
-  res.redirect("/");
-};
-exports.postLogout = (req, res) => {
-  req.session.destroy((err) => {
-    console.log(err);
-    res.redirect("/");
-  });
 };
