@@ -16,10 +16,16 @@
             <br>
             <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <button>Login</button>
+            <button>Signup</button>
         </form>
+        <div class="helpers-container">
+            <a href="/auth/login">Already a user? login here</a>
+        </div>
         <% if(errorMessage){ %>
             <div class="error-container"><%= errorMessage %></div>
+        <% } %>
+        <% if(feedback){ %>
+            <div class="feedback-container"><%= feedback %></div>
         <% } %>
     </div>
 

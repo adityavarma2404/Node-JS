@@ -8,10 +8,16 @@
             <br>
             <br>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-            <button>Login</button>
+            <button>Reset</button>
         </form>
+        <div class="helpers-container">
+            <a href="/auth/login">Login here</a>
+        </div>
         <% if(errorMessage){ %>
-            <div><%= errorMessage %></div>
+            <div class="error-container"><%= errorMessage %></div>
+        <% } %>
+        <% if(feedback){ %>
+            <div class="feedback-container"><%= feedback %></div>
         <% } %>
     </div>
 

@@ -74,6 +74,14 @@ th {
   margin: 30px;
 }
 
+input {
+  padding: 3px 6px;
+}
+
+button {
+  padding: 5px 8px;
+}
+
 .profile-img {
   border-radius: 50%;
 }
@@ -87,8 +95,30 @@ th {
   align-items: center;
 }
 
-.login-container input.invalid {
-  border: 1px solid red;
+.login-container form {
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.login-container form button {
+  padding: 5px 10px;
+}
+
+.login-container form input {
+  padding: 2px 5px;
+}
+
+.login-container .helpers-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container .helpers-container a:first-child {
+  margin-bottom: 5px;
+}
+
+input.invalid {
+  border: 1px solid rgb(214, 0, 0);
 }
 
 .logout-nav {
@@ -105,6 +135,18 @@ th {
   border: 1px solid red;
   color: black;
   background-color: rgb(255, 157, 157);
+  width: 500px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.feedback-container {
+  border: 1px solid rgb(0, 13, 255);
+  color: black;
+  background-color: rgb(173, 192, 255);
   width: 500px;
   padding: 10px;
   display: flex;

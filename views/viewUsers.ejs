@@ -3,6 +3,7 @@
 <body>
     <%- include('includes/nav.ejs') %>
     <div class="table-container">
+        <% if(data.length>0){%>
         <table>
             <thead>
                 <tr>
@@ -34,9 +35,11 @@
                             </form>
                         </td>
                     </tr>
-                <% }); %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+            <% })} else { %>
+                <h1>Add data to table</h1>
+            <% } %>
         </ul>
     </div>
 

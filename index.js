@@ -10,11 +10,14 @@ const flash = require("connect-flash");
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
 const Colleges = require("./model/college");
+const errorController = require("./controller/error");
 // const Users = require("./model/users");
 
 const app = express();
 const PORT = 5000;
-const MONGODB_URI = "GIVE YOUR DB URL";
+const MONGODB_URI =
+  "mongodb+srv://aditya:aditya123@cluster0.qec8fak.mongodb.net/users";
+// "mongodb+srv://aditya:aditya123@cluster0.qec8fak.mongodb.net/users?retryWrites=true&w=majority&appName=Cluster0";
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
@@ -75,8 +78,14 @@ app.use((req, res, next) => {
 
 app.get("/favicon.ico", (req, res) => res.status(204).send());
 
+app.get("/500", errorController.get500);
 app.use("/", userRouter);
 app.use("/auth", authRouter);
+
+app.use((error, req, res, next) => {
+  console.log("Inside 500 middleware");
+  res.redirect("/500");
+});
 
 mongoose
   .connect(MONGODB_URI)

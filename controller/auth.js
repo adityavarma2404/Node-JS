@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator");
 const Admin = require("../model/admin");
 
 const apiKey = SibApiV3Sdk.ApiClient.instance.authentications["api-key"];
-apiKey.remove_this_apiKey = "GIVE YOUR API";
+apiKey.apiKey = "q";
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
@@ -31,7 +31,6 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = (req, res) => {
   const { email, password } = req.body;
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render("login", {
@@ -94,9 +93,16 @@ exports.getSignup = (req, res) => {
   } else {
     message = null;
   }
+  let feedback = req.flash("signup-feedback");
+  if (feedback.length > 0) {
+    feedback = feedback[0];
+  } else {
+    feedback = null;
+  }
   res.render("signup", {
     title: "Signup",
     errorMessage: message,
+    feedback: feedback,
     errorValidations: [],
     oldData: {
       email: "",
@@ -114,6 +120,7 @@ exports.postSignup = (req, res) => {
       title: "Signup",
       errorMessage: errors.array()[0].msg,
       errorValidations: errors.array(),
+      feedback: "",
       oldData: {
         email: email,
         password: password,
@@ -138,16 +145,17 @@ exports.postSignup = (req, res) => {
       return newAdmin.save();
     })
     .then((result) => {
-      res.redirect("/auth/login");
+      req.flash("signup-feedback", "Successfully signed up");
+      res.redirect("/auth/signup");
       const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
       sendSmtpEmail.to = [{ email: email }];
       sendSmtpEmail.sender = {
         email: "adityavarma2404@gmail.com",
-        name: "Ni Mogudu",
+        name: "Notifier",
       };
-      sendSmtpEmail.subject = "Testing API";
-      sendSmtpEmail.textContent = "signup successful";
-      sendSmtpEmail.htmlContent = "<h1> Aakulu </h1>";
+      sendSmtpEmail.subject = "Signup successful";
+      sendSmtpEmail.htmlContent =
+        "<h1> You are successfully signed up, please login </h1>";
       return apiInstance.sendTransacEmail(sendSmtpEmail);
     })
     .catch((err) => console.log(err));
@@ -168,10 +176,22 @@ exports.postLogout = (req, res) => {
 
 exports.getReset = (req, res, next) => {
   let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+  let reset = req.flash("reset");
+  if (reset.length > 0) {
+    reset = reset[0];
+  } else {
+    reset = null;
+  }
   res.render("reset", {
     path: "/reset",
     title: "Reset Password",
     errorMessage: message,
+    feedback: reset,
   });
 };
 
@@ -186,27 +206,27 @@ exports.postReset = (req, res, next) => {
       .then((user) => {
         if (!user) {
           req.flash("error", "No account with that email found.");
-          return res.redirect("/auth/reset");
+          res.redirect("/auth/reset");
+          return;
         }
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
-        return user.save();
-      })
-      .then((result) => {
-        res.redirect("/");
-
-        const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-        sendSmtpEmail.to = [{ email: req.body.email }];
-        sendSmtpEmail.sender = {
-          email: "adityavarma2404@gmail.com",
-          name: "Ni Mogudu",
-        };
-        sendSmtpEmail.subject = "Password reset";
-        sendSmtpEmail.htmlContent = `
+        return user.save().then((result) => {
+          req.flash("reset", "Reset link sent to your email.");
+          res.redirect("/auth/reset");
+          const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+          sendSmtpEmail.to = [{ email: req.body.email }];
+          sendSmtpEmail.sender = {
+            email: "adityavarma2404@gmail.com",
+            name: "Notifier",
+          };
+          sendSmtpEmail.subject = "Password reset";
+          sendSmtpEmail.htmlContent = `
             <p>You requested a password reset</p>
             <p>Click this <a href="http://localhost:5000/auth/reset/${token}">link</a> to set a new password.</p>
           `;
-        return apiInstance.sendTransacEmail(sendSmtpEmail);
+          return apiInstance.sendTransacEmail(sendSmtpEmail);
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -263,7 +283,7 @@ exports.postNewPassword = (req, res, next) => {
       res.redirect("/auth/login");
     })
     .catch((err) => {
-      console.log(err);
+      res.send("Password reset expired");
     });
 };
 

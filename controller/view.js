@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const Users = require("../model/users");
 const Colleges = require("../model/college");
 
@@ -18,13 +19,38 @@ exports.getForm = (req, res) => {
   res.render("createUser", {
     title: "Create",
     path: "/add-user",
+    errorMessage: "",
+    errorValidations: [],
+    oldData: {
+      name: "",
+      age: "",
+      email: "",
+      phone: "",
+      college: "",
+    },
     // profilePic: `data:${
     //   req.profilePic.contentType
     // };base64,${req.profilePic.data.toString("base64")}`,
   });
 };
 
-exports.addData = (req, res) => {
+exports.addData = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("createUser", {
+      title: "Create",
+      path: "/add-user",
+      errorMessage: errors.array()[0].msg,
+      errorValidations: errors.array(),
+      oldData: {
+        name: req.body.name,
+        age: req.body.age,
+        email: req.body.email,
+        phone: req.body.phone,
+        college: req.body.college,
+      },
+    });
+  }
   const collegeList = {
     MGIT: "668a3f689ab1cc602db25272",
     CBIT: "668a3f689ab1cc602db25273",
@@ -48,7 +74,11 @@ exports.addData = (req, res) => {
     contentType: imageFile.mimetype,
   };
   const { college, ...rest } = req.body;
-  const data = { ...rest, collegeId: collegeList[college], imageURL };
+  const data = {
+    ...rest,
+    collegeId: collegeList[college],
+    imageURL,
+  };
   const users = new Users(data);
   users
     .save()
@@ -60,7 +90,11 @@ exports.addData = (req, res) => {
         .then((result) => res.redirect("/"))
         .catch((err) => console.log(err));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.editForm = (req, res) => {

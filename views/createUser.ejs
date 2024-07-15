@@ -5,23 +5,23 @@
     <div class="add-form">
         <form action="/add-user" method="POST" enctype="multipart/form-data">
             <label for="name">Name</label><br/>
-            <input id="name" name="name" type="text" placeholder="Aditya" />
+            <input class="<%= errorValidations.find(i => i.path === 'name') ? 'invalid' : '' %>" id="name" name="name" type="text" placeholder="Aditya" value="<%= oldData.name %>" />
             <br/>
             <br/>
             <label for="age">Age</label><br/>
-            <input id="age" name="age" type="number" />
+            <input class="<%= errorValidations.find(i => i.path === 'age') ? 'invalid' : '' %>" id="age" name="age" type="number" value="<%= oldData.age %>" />
             <br/>
             <br/>
             <label for="email">Email</label><br/>
-            <input id="email" name="email" type="text" placeholder="aditya@gmail.com" />
+            <input class="<%= errorValidations.find(i => i.path === 'email') ? 'invalid' : '' %>" id="email" name="email" type="text" value="<%= oldData.email %>" placeholder="aditya@gmail.com" />
             <br/>
             <br/>
             <label for="phone">Phone</label><br/>
-            <input id="phone" name="phone" type="number" placeholder="9996665741" />
+            <input class="<%= errorValidations.find(i => i.path === 'phone') ? 'invalid' : '' %>" id="phone" name="phone" type="number" value="<%= oldData.phone %>" placeholder="9996665741" />
             <br/>
             <br/>
             <label for="college">College</label><br/>
-            <select id="college" name="college">
+            <select class="<%= errorValidations.find(i => i.path === 'college') ? 'invalid' : '' %>" id="college" name="college" value="<%= oldData.college %>">
                 <option value=""></option>
                 <option value="MGIT">MGIT</option>
                 <option value="CBIT">CBIT</option>
@@ -37,6 +37,9 @@
             <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <button>submit</button>
         </form>
+        <% if(errorMessage){ %>
+            <div class="error-container"><%= errorMessage %></div>
+        <% } %>
     </div>
 
 <%- include('includes/end.ejs') %>
