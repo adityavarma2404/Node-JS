@@ -4,19 +4,23 @@
     <div class="login-container">
         <form action="/auth/signup" method="POST">
             <label for="email">Email:</label><br>
-            <input type="text" id="email" name="email" >
+            <input class="<%= errorValidations.find(i => i.path === 'email') ? 'invalid' : '' %>" type="text" id="email" name="email" value="<%= oldData.email %>" >
             <br>
             <br>
             <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" >
+            <input class="<%= errorValidations.find(i => i.path === 'password') ? 'invalid' : '' %>" type="password" id="password" name="password" value="<%= oldData.password %>" >
             <br>
             <br>
             <label for="cPassword">Confirm Password:</label><br>
-            <input type="password" id="cPassword" name="cPassword" >
+            <input class="<%= errorValidations.find(i => i.path === 'cPassword') ? 'invalid' : '' %>" type="password" id="cPassword" name="cPassword" value="<%= oldData.cPassword %>" >
             <br>
             <br>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <button>Login</button>
         </form>
+        <% if(errorMessage){ %>
+            <div class="error-container"><%= errorMessage %></div>
+        <% } %>
     </div>
 
 <%- include('includes/end.ejs') %>

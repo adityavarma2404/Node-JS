@@ -9,7 +9,7 @@
           >Add</a
         >
       </li>
-      <% if(isloggedin) {%>
+      <% if(isLoggedIn) {%>
       <li class="nav-li">
         <a class="<%= path === '/students' ? 'active' : '' %>" href="students"
           >Students</a
@@ -18,10 +18,11 @@
       <% } %>
     </ul>
     <div class="logout-nav">
-      <form action="/logout" method="post">
+      <form action="/auth/logout" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
         <button type="submit">Logout</button>
       </form>
-      <img class="profile-img" src="<%= profilePic %>" width="40" height="40" />
+      <!-- <img class="profile-img" src="<%=  %>" width="40" height="40" /> -->
     </div>
   </nav>
 </header>

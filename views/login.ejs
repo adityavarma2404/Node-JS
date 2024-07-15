@@ -2,17 +2,24 @@
 </head>
 <body>
     <div class="login-container">
-        <form action="/login" method="POST">
-            <label for="name">Username:</label><br>
-            <input type="text" id="name" name="name" >
+        <form action="/auth/login" method="POST">
+            <label for="email">Email:</label><br>
+            <input class="<%= errorValidations.find(i => i.path === 'email') ? 'invalid' : '' %>" type="text" id="email" name="email" value="<%= oldInput.email %>" >
             <br>
             <br>
             <label for="password">Password:</label><br>
-            <input type="text" id="password" name="password" >
+            <input class="<%= errorValidations.find(i => i.path === 'password') ? 'invalid' : '' %>" type="password" id="password" name="password" value="<%= oldInput.password%>" >
             <br>
             <br>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <button>Login</button>
         </form>
+        <div>
+            <a href="/auth/reset">Forgot password?</a>
+        </div>
+        <% if(errorMessage){ %>
+            <div class="error-container"><%= errorMessage %></div>
+        <% } %>
     </div>
 
 <%- include('includes/end.ejs') %>

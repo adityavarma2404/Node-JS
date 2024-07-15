@@ -82,8 +82,13 @@ th {
   width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.login-container input.invalid {
+  border: 1px solid red;
 }
 
 .logout-nav {
@@ -94,4 +99,16 @@ th {
 
 .logout-nav form {
   margin-right: 10px;
+}
+
+.error-container {
+  border: 1px solid red;
+  color: black;
+  background-color: rgb(255, 157, 157);
+  width: 500px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }

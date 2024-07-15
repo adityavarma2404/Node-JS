@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const lusca = require("lusca");
+const flash = require("connect-flash");
 
 const userRouter = require("./routes/user");
 const authRouter = require("./routes/auth");
@@ -12,8 +14,7 @@ const Colleges = require("./model/college");
 
 const app = express();
 const PORT = 5000;
-const MONGODB_URI =
-  "mongodb+srv://aditya:aditya123@cluster0.qec8fak.mongodb.net/users?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = "GIVE YOUR DB URL";
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
@@ -37,7 +38,6 @@ app.set("views", "views");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "my secret",
@@ -47,6 +47,18 @@ app.use(
   })
 );
 
+app.use(
+  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
+    "image"
+  )
+);
+
+//for CSRF tokens
+app.use(lusca.csrf());
+
+//for flashing error messages
+app.use(flash());
+
 app.use((req, res, next) => {
   if (!req.session.profilePic) {
     return next();
@@ -55,20 +67,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use((req, res, next) => {
-//   Users.findById("668e7a322ceb1116c78ffe2c")
-//     .then((result) => {
-//       req.profilePic = result.imageURL;
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
-
-app.use(
-  multer({ storage: multer.memoryStorage(), fileFilter: fileFilter }).single(
-    "image"
-  )
-);
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 app.get("/favicon.ico", (req, res) => res.status(204).send());
 

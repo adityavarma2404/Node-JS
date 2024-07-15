@@ -23,11 +23,13 @@
                         <td class="action-column">
                             <form action="/edit" method="GET">
                                 <input type="hidden" value="<%= user._id %>" name="_id">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                 <button>Edit</button>
                             </form>
                             <form action="/delete" method="POST">
                                 <input type="hidden" value="<%= user._id %>" name="_id">
                                 <input type="hidden" value="<%= user.collegeId %>" name="clgId">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                                 <button>Delete</button>
                             </form>
                         </td>

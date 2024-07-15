@@ -25,7 +25,8 @@
             <br/>
             <br/>
             <input type="hidden" name="_id" value="<%= data._id%>" />
-            <button type="submit">submit</button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button>submit</button>
         </form>
     </div>
 

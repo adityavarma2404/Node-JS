@@ -6,12 +6,10 @@ exports.getData = (req, res) => {
     res.render("viewUsers", {
       title: "View",
       path: "/",
-      profilePic: `data:${
-        req.profilePic.contentType
-      };base64,${req.profilePic.data.toString("base64")}`,
+      // profilePic: `data:${
+      //   req.profilePic.contentType
+      // };base64,${req.profilePic.data.toString("base64")}`,
       data,
-      // isloggedin: true,
-      isloggedin: req.session.isLoggedIn,
     });
   });
 };
@@ -20,11 +18,9 @@ exports.getForm = (req, res) => {
   res.render("createUser", {
     title: "Create",
     path: "/add-user",
-    profilePic: `data:${
-      req.profilePic.contentType
-    };base64,${req.profilePic.data.toString("base64")}`,
-    // isloggedin: true,
-    isloggedin: req.session.isLoggedIn,
+    // profilePic: `data:${
+    //   req.profilePic.contentType
+    // };base64,${req.profilePic.data.toString("base64")}`,
   });
 };
 
@@ -41,11 +37,9 @@ exports.addData = (req, res) => {
       title: "Error",
       path: "",
       message: "No image provided",
-      profilePic: `data:${
-        req.profilePic.contentType
-      };base64,${req.profilePic.data.toString("base64")}`,
-      // isloggedin: true,
-      isloggedin: req.session.isLoggedIn,
+      // profilePic: `data:${
+      //   req.profilePic.contentType
+      // };base64,${req.profilePic.data.toString("base64")}`,
     });
   }
 
@@ -77,11 +71,9 @@ exports.editForm = (req, res) => {
         title: "Edit",
         path: "",
         data: user,
-        profilePic: `data:${
-          req.profilePic.contentType
-        };base64,${req.profilePic.data.toString("base64")}`,
-        // isloggedin: true,
-        isloggedin: req.session.isLoggedIn,
+        // profilePic: `data:${
+        //   req.profilePic.contentType
+        // };base64,${req.profilePic.data.toString("base64")}`,
       });
     })
     .catch((err) => console.log(err));
@@ -106,8 +98,6 @@ exports.editData = (req, res) => {
           data: Buffer.from(imageFile.buffer, "base64"),
           contentType: imageFile.mimetype,
         };
-      } else {
-        throw new Error("Select image file");
       }
       return user.save();
     })
@@ -121,11 +111,9 @@ exports.editData = (req, res) => {
         title: "Error",
         path: "",
         message: err.message,
-        profilePic: `data:${
-          req.profilePic.contentType
-        };base64,${req.profilePic.data.toString("base64")}`,
-        isloggedin: req.session.isLoggedIn,
-        // isloggedin: true,
+        // profilePic: `data:${
+        //   req.profilePic.contentType
+        // };base64,${req.profilePic.data.toString("base64")}`,
       });
     });
 };
@@ -165,11 +153,9 @@ exports.getstudentsData = (req, res) => {
         title: "Students",
         path: "/students",
         data,
-        profilePic: `data:${
-          req.profilePic.contentType
-        };base64,${req.profilePic.data.toString("base64")}`,
-        isloggedin: req.session.isLoggedIn,
-        // isloggedin: true,
+        // profilePic: `data:${
+        //   req.profilePic.contentType
+        // };base64,${req.profilePic.data.toString("base64")}`,
       })
     )
     .catch((err) => console.log(err));
